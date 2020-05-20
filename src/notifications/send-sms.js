@@ -1,5 +1,5 @@
 export default function buildMakeSMS() {
-    return function makePostSMS({
+    return function makeSendSMS({
         group_id,
         merchant_id,
         message
