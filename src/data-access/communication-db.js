@@ -8,7 +8,7 @@ export default function makeCommunication ({ makeCommunicationDb }){
         createSMS
     })
     async function createSMS({ id: _id = Id.makeId(), ...sms_details }){
-        console.log("in communication-db.js", sms_details, "sms_details")
+        //sms_details = data specified in entity, groupid, merchantid ... initiatedon
         const db = await makeCommunicationDb()
         const result = await db
         .collection(process.env.smsCollection)

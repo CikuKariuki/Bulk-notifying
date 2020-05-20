@@ -9,10 +9,12 @@ export default function makeSmsSender({ makeAxios }) {
     async function startSendSMS({ ...messageInfo }) {
         // messageInfo is the body, merchant_id and message
         const axios = await makeAxios()
+        var array = ["254729616980","254775604548"]
+        // for (i=array[0]; i<=array.length; i++){}
         const data = {
             "api_key": process.env.smsApiKey,
             "service_id": 0,
-            "mobile": "254729616980", //input array of numbers from contactsdb
+            "mobile": replacewithphonefromarray, //input array of numbers from contactsdb look how notifications looped through, but first how csvitems was ooped through.
             "response_type": "json",
             "shortcode": "Tilil",
             "message": messageInfo.message
