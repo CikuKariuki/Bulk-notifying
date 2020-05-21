@@ -2,12 +2,18 @@ import dotenv from 'dotenv'
 import express from 'express'
 import bodyParser from'body-parser' 
 import expressCallback from './callbacks'
+import csvCallback from './callbacks/csv-callback'
 import controllers from './controllers'
+import multer from 'multer'
+import { postUpload } from './controllers/post-uploads'
 
 const app = express()
 dotenv.config()
 const port = 6000
 const apiVersion = process.env.apiVersion
+
+//setting csv upload directory destination
+const upload = multer({ dest: 'uploads/csv' })
 
 app.use(bodyParser.json())
 app.use((_, res, next) =>{
@@ -15,8 +21,9 @@ app.use((_, res, next) =>{
     next()
 })
 
-
-// //endpoint that is calling controllers that call a function called sendSMS
+// endpoint for uploading contacts
+app.post(`${apiVersion}/upload/:merchant_id`, upload.single('csvFile'), csvCallback( controllers.postUpload))
+//endpoint that is calling controllers that call a function called sendSMS
 app.post(`${apiVersion}/notification/sms/:group_id`, expressCallback(controllers.notifications.sendSMS))
 app.use(expressCallback(controllers.notFound))
 

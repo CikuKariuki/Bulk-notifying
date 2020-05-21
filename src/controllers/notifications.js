@@ -26,4 +26,4 @@ export default function makeNotifications({ notificationUseCases }){
         sendSMS
     })
 }
-// responses are got from the imported http-respnse file.
+// responses are got from the imported http-response file.
