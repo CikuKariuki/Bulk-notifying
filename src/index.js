@@ -5,7 +5,7 @@ import expressCallback from './callbacks'
 import csvCallback from './callbacks/csv-callback'
 import controllers from './controllers'
 import multer from 'multer'
-import { postUpload } from './controllers/post-uploads'
+// import { postUpload } from './controllers/post-uploads'
 
 const app = express()
 dotenv.config()

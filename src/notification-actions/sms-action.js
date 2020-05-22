@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 dotenv.config()
-
+// how do we get info from group_id in communications db contats collection to be pushed into an array here
 // here we write code to send the sms, hence sms action
 export default function makeSmsSender({ makeAxios }) {
     return Object.freeze({
@@ -18,7 +18,7 @@ export default function makeSmsSender({ makeAxios }) {
             "service_id": 0,
             "mobile": item, //input array of numbers from contactsdb look how notifications looped through, but first how csvitems was ooped through.
             "response_type": "json",
-            "shortcode": "Tilil",
+            "shortcode": "Ciku",
             "message": messageInfo.message
         }
         axios.post('https://api.tililsms.com/sms/v3/sendsms', data)
