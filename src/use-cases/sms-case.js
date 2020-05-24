@@ -5,6 +5,10 @@ export default function makeSendSMS({ communicationDb, responses, smsSend }) {
         const server_err_msg = "An error has occured while processing your request"
         let sms_notification
 
+
+        const contact = await communicationDb.findByGroupId({ })
+        var see = {...contact}
+        console.log("see",see.phone)
         try {
             sms_notification = makeSMS(data)
             // invoke entity ensure everything that is required is there.

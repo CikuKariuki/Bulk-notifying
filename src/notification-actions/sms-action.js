@@ -1,16 +1,21 @@
 import dotenv from "dotenv";
 dotenv.config()
+
 // how do we get info from group_id in communications db contats collection to be pushed into an array here
 // here we write code to send the sms, hence sms action
-export default function makeSmsSender({ makeAxios }) {
+export default function makeSmsSender({ makeAxios, communicationDb }) {
     return Object.freeze({
         startSendSMS
     })
     async function startSendSMS({ ...messageInfo }) {
         // messageInfo is the body, merchant_id and message
+        const contact = await communicationDb.findByGroupId({ group_id: group_id})
+        console.log(contact)
+        // let arr = []
+        // const phone = arr.push(contact.phone)
+        // console.log(phone)
         const axios = await makeAxios()
         var array = ["254776776096","254727766302"]
-        // for (i=array[0]; i<=array.length; i++){}
         array.forEach(function phone(item, index, arr){
             item = arr[index]
         const data = {

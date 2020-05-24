@@ -1,9 +1,7 @@
 export default function createPostUpload ({ addUpload }){
     return async function postUpload (uploadInfo){
         try{
-            const posted = await addUpload ({
-                ...uploadInfo
-            })
+            const posted = await addUpload ({...uploadInfo })
             return {
                 headers: {
                     'Content-Type': 'application/json',
