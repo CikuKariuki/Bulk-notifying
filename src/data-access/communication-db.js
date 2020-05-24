@@ -79,6 +79,17 @@ export default function makeCommunicationDb ({ makeDb }){
 
         return result.modifiedCount > 0 ? { ...uploadInfo } : null
     }
+    async function findByMerchantId ({ merchant_id }){
+        const db = await makeDb()
+        const result = await db.collection(process.env.CONTACTS_COLLECTION).find({ merchant_id: merchant_id })
+        const found = await result.toArray()
+        if (found.length === 0) {
+            return null
+        }
+        const { ...info } = found[0]
+        return { ...info }
+    }
+    
     async function findByGroupId({ group_id }) {
         const db = await makeDb()
         const result = await db.collection(process.env.CONTACTS_COLLECTION).find({ group_id: group_id })
@@ -86,7 +97,7 @@ export default function makeCommunicationDb ({ makeDb }){
         if (found.length === 0) {
             return null
         }
-        const { ...info } = found[0]
+        const { ...info } = found[0] //found [0] currently returning the first result in db only
         return { ...info }
     }
 }

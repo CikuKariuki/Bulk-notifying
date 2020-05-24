@@ -9,11 +9,14 @@ export default function makeSmsSender({ makeAxios, communicationDb }) {
     })
     async function startSendSMS({ ...messageInfo }) {
         // messageInfo is the body, merchant_id and message
-        const contact = await communicationDb.findByGroupId({ group_id: group_id})
-        console.log(contact)
         // let arr = []
         // const phone = arr.push(contact.phone)
         // console.log(phone)
+        const contact = await communicationDb.findAll({ })
+        var see = { ...contact }
+        console.log("see", contact)
+
+        
         const axios = await makeAxios()
         var array = ["254776776096","254727766302"]
         array.forEach(function phone(item, index, arr){

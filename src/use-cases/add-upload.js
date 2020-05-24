@@ -15,11 +15,7 @@ export default function createAddUpload({ communicationDb }) {
                         merchant_id: upload.getMerchantId(),
                         name: upload.getName(),
                         email: upload.getEmail(),
-                        group_id: [
-
-                            { group_id: upload.getGroupId() }
-                        ]
-
+                        group_id: upload.getGroupId()
                     }
 
                 ]
