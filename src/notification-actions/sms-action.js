@@ -9,18 +9,18 @@ export default function makeSmsSender({ makeAxios, communicationDb }) {
     })
     async function startSendSMS({ ...messageInfo }) {
         // messageInfo is the body, merchant_id and message
-        // let arr = []
-        // const phone = arr.push(contact.phone)
-        // console.log(phone)
+        let arr = []
         const contact = await communicationDb.findAll({ })
-        var see = { ...contact }
-        console.log("see", contact)
+        contact.forEach(function(element, index, item){
+            arr.push(contact[index].phone)
+        })
+        // console.log(arr)
 
-        
         const axios = await makeAxios()
-        var array = ["254776776096","254727766302"]
-        array.forEach(function phone(item, index, arr){
-            item = arr[index]
+        // var array = ["254776776096","254727766302"]
+        // console.log(array)
+        arr.forEach(function phone(item, index, array){
+            item = array[index]
         const data = {
             "api_key": process.env.smsApiKey,
             "service_id": 0,
