@@ -10,7 +10,8 @@ export default function makeCommunicationDb ({ makeDb }){
         findById,
         insert,
         createContact,
-        findByGroupId
+        findByGroupId,
+        findByMerchantId
     })
 
     async function createSMS({ id: _id = Id.makeId(), ...sms_details }){
@@ -24,6 +25,7 @@ export default function makeCommunicationDb ({ makeDb }){
         return { id, ...insertedInfo}
     }
 
+    // find everyone in db
     async function findAll() {
         const db = await makeDb()
         const result = await db.collection(process.env.CONTACTS_COLLECTION).find({})
@@ -32,6 +34,7 @@ export default function makeCommunicationDb ({ makeDb }){
         }))
     }
 
+    // find a user guided by id
     async function findById({ id: _id }) {
         const db = await makeDb()
         const result = await db.collection(process.env.CONTACTS_COLLECTION).find({ _id })
@@ -43,6 +46,7 @@ export default function makeCommunicationDb ({ makeDb }){
         return { id, ...info }
     }
 
+    // insert the uploaded contacts into the db
     async function insert({ _id = Id.makeId(), ...uploadInfo }) {
         const db = await makeDb()
         const result = await db
@@ -53,6 +57,7 @@ export default function makeCommunicationDb ({ makeDb }){
         return { ...insertedInfo }
     }
 
+    // create contact from the uploaded contact details and update the phone number
     async function createContact({ ...uploadInfo }) {
         const db = await makeDb()
         const phone = uploadInfo.phone
@@ -79,6 +84,8 @@ export default function makeCommunicationDb ({ makeDb }){
 
         return result.modifiedCount > 0 ? { ...uploadInfo } : null
     }
+
+    // finding merchant id ( might have to open up a little more to get access to merchant id)
     async function findByMerchantId ({ merchant_id }){
         const db = await makeDb()
         const result = await db.collection(process.env.CONTACTS_COLLECTION).find({ merchant_id: merchant_id })
@@ -90,14 +97,40 @@ export default function makeCommunicationDb ({ makeDb }){
         return { ...info }
     }
     
-    async function findByGroupId({ group_id }) {
+    // find contacts using group id.
+    
+    async function findByGroupId({ group_id }){
         const db = await makeDb()
-        const result = await db.collection(process.env.CONTACTS_COLLECTION).find({ group_id: group_id })
+        const result = await db.collection(process.env.CONTACTS_COLLECTION).find({ "merchants.group_id" : group_id})
         const found = await result.toArray()
+        // console.log("kklklkl", found)
+        if(found.length === 0){
+            return null
+        }
+        // const {...info} = found
+        // console.log("jkjkj", info)
+        return found
+    }
+   /* async function findByGroupId({ group_id }) {
+        const db = await makeDb()
+
+        // find merchants which is an array loop through each array and get group_id
+        const initialResult = await db.collection(process.env.CONTACTS_COLLECTION).find({ group_id: group_id})
+        const allData = await initialResult.toArray()
+        // allData == all the data in the db
+        let found =[]
+        allData.forEach(function(element, index, item){
+            const merchant = (allData[index].merchants)
+            merchant.forEach((element, index, item)=>{
+                found.push(merchant[index].group_id)
+            })                       
+        })
+        console.log("lll", found) // returns all the names of the group ids that are stored
+        // const found = await result.toArray()
         if (found.length === 0) {
             return null
         }
-        const { ...info } = found[0] //found [0] currently returning the first result in db only
+        const { ...info } = found[0] 
         return { ...info }
-    }
+    }*/
 }
