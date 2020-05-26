@@ -11,7 +11,9 @@ export default function makeCommunicationDb ({ makeDb }){
         insert,
         createContact,
         findByGroupId,
-        findByMerchantId
+        findByMerchantId,
+        updateEmailStatusByID,
+        createPendingEmail
     })
 
     async function createSMS({ id: _id = Id.makeId(), ...sms_details }){
@@ -98,7 +100,6 @@ export default function makeCommunicationDb ({ makeDb }){
     }
     
     // find contacts using group id.
-    
     async function findByGroupId({ group_id }){
         const db = await makeDb()
         const result = await db.collection(process.env.CONTACTS_COLLECTION).find({ "merchants.group_id" : group_id})
@@ -107,30 +108,28 @@ export default function makeCommunicationDb ({ makeDb }){
         if(found.length === 0){
             return null
         }
-        // const {...info} = found
-        // console.log("jkjkj", info)
         return found
     }
-   /* async function findByGroupId({ group_id }) {
+    async function updateEmailStatusByID(messageInfo){
+        const msgInfo = messageInfo 
+        const julla_id = msgInfo.jullaId.toString()
+        const event = msgInfo.event.toString()
+        const status = { $set: {status: event} };
+    
         const db = await makeDb()
+        const result = await db
+          .collection(process.env.PENDING_EMAIL_COLLECTION)
+          .updateOne({julla_id},status )
+          return result.modifiedCount > 0 ? { julla_id: julla_id, msgInfo } : null
+      }
 
-        // find merchants which is an array loop through each array and get group_id
-        const initialResult = await db.collection(process.env.CONTACTS_COLLECTION).find({ group_id: group_id})
-        const allData = await initialResult.toArray()
-        // allData == all the data in the db
-        let found =[]
-        allData.forEach(function(element, index, item){
-            const merchant = (allData[index].merchants)
-            merchant.forEach((element, index, item)=>{
-                found.push(merchant[index].group_id)
-            })                       
-        })
-        console.log("lll", found) // returns all the names of the group ids that are stored
-        // const found = await result.toArray()
-        if (found.length === 0) {
-            return null
-        }
-        const { ...info } = found[0] 
-        return { ...info }
-    }*/
+      async function createPendingEmail({...notificationInfo}){
+        const db = await makeDb()
+        const results = await db
+        .collection(process.env.PENDING_EMAIL_COLLECTION)
+        .insertOne({...notificationInfo})
+        const {...createdNotifications} = results.ops[0]
+        return {...createdNotifications}
+      }
+    
 }

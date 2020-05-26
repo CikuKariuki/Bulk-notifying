@@ -2,8 +2,10 @@ import notificationUseCases from '../use-cases'
 import notFound from './not-found'
 import makeNotifications from './notifications'
 import createPostUpload from './post-uploads'
-import { addUpload } from '../use-cases'
+import { addUpload, } from '../use-cases'
+import makePostSGCallback from './post-sg-callback'
 
+const SgCallbackPoster  = makePostSGCallback({postSGCallback})
 const notifications = makeNotifications({ notificationUseCases })
 const postUpload = createPostUpload({ addUpload })
 
@@ -11,8 +13,9 @@ const postUpload = createPostUpload({ addUpload })
 const controller = Object.freeze({
     notFound,
     notifications,
-    postUpload
+    postUpload,
+    SgCallbackPoster
 })
 
 export default controller
-export { notFound, notifications, postUpload }
+export { notFound, notifications, postUpload, SgCallbackPoster }

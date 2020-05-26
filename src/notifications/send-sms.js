@@ -2,7 +2,8 @@ export default function buildMakeSMS() {
     return function makeSendSMS({
         group_id,
         merchant_id,
-        message
+        message,
+        subject
 
     } = {}) {
         if (!group_id) {
@@ -24,6 +25,7 @@ export default function buildMakeSMS() {
             getGroupId: () => group_id,
             getMerchantId: () => merchant_id,
             getMessage: () => message,
+            getSubject: () => subject,
             getSmsCount: () => sms_counter,
             getInitiatedOn: () =>Date.now()
         })
