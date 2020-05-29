@@ -5,7 +5,6 @@ import expressCallback from './callbacks'
 import csvCallback from './callbacks/csv-callback'
 import controllers from './controllers'
 import multer from 'multer'
-import {SgCallbackPoster} from './controllers'
 
 // import { postUpload } from './controllers/post-uploads'
 
@@ -27,7 +26,6 @@ app.use((_, res, next) =>{
 app.post(`${apiVersion}/upload/:merchant_id`, upload.single('csvFile'), csvCallback( controllers.postUpload))
 //endpoint that is calling controllers that call a function called sendSMS
 app.post(`${apiVersion}/notification/sms/:group_id`, expressCallback(controllers.notifications.sendSMS))
-app.post(`${apiVersion}/sgcallback`, expressCallback(SgCallbackPoster))
 
 app.use(expressCallback(controllers.notFound))
 

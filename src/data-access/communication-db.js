@@ -12,8 +12,7 @@ export default function makeCommunicationDb ({ makeDb }){
         createContact,
         findByGroupId,
         findByMerchantId,
-        updateEmailStatusByID,
-        createPendingEmail
+        
     })
 
     async function createSMS({ id: _id = Id.makeId(), ...sms_details }){
@@ -110,26 +109,5 @@ export default function makeCommunicationDb ({ makeDb }){
         }
         return found
     }
-    async function updateEmailStatusByID(messageInfo){
-        const msgInfo = messageInfo 
-        const julla_id = msgInfo.jullaId.toString()
-        const event = msgInfo.event.toString()
-        const status = { $set: {status: event} };
-    
-        const db = await makeDb()
-        const result = await db
-          .collection(process.env.PENDING_EMAIL_COLLECTION)
-          .updateOne({julla_id},status )
-          return result.modifiedCount > 0 ? { julla_id: julla_id, msgInfo } : null
-      }
-
-      async function createPendingEmail({...notificationInfo}){
-        const db = await makeDb()
-        const results = await db
-        .collection(process.env.PENDING_EMAIL_COLLECTION)
-        .insertOne({...notificationInfo})
-        const {...createdNotifications} = results.ops[0]
-        return {...createdNotifications}
-      }
     
 }
