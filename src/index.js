@@ -6,7 +6,6 @@ import csvCallback from './callbacks/csv-callback'
 import controllers from './controllers'
 import multer from 'multer'
 
-// import { postUpload } from './controllers/post-uploads'
 
 const app = express()
 dotenv.config()
@@ -26,6 +25,8 @@ app.use((_, res, next) =>{
 app.post(`${apiVersion}/upload/:merchant_id`, upload.single('csvFile'), csvCallback( controllers.postUpload))
 //endpoint that is calling controllers that call a function called sendSMS
 app.post(`${apiVersion}/notification/sms/:group_id`, expressCallback(controllers.notifications.sendSMS))
+// email sending
+app.post(`${apiVersion}/notification/email/:group_id`, expressCallback(controllers.emails.sendEmail))
 
 app.use(expressCallback(controllers.notFound))
 

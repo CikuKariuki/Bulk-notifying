@@ -3,27 +3,39 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-export default function makeCommunicationDb ({ makeDb }){
+export default function makeCommunicationDb({ makeDb }) {
     return Object.freeze({
-        createSMS, 
+        createSMS,
+        createEmail,
         findAll,
         findById,
         insert,
         createContact,
         findByGroupId,
         findByMerchantId,
-        
+
     })
 
-    async function createSMS({ id: _id = Id.makeId(), ...sms_details }){
+    async function createSMS({ id: _id = Id.makeId(), ...sms_details }) {
         //sms_details = data specified in entity, groupid, merchantid ... initiatedon
         const db = await makeDb()
         const result = await db
-        .collection(process.env.smsCollection)
-        .insertOne({ _id, ...sms_details })
+            .collection(process.env.smsCollection)
+            .insertOne({ _id, ...sms_details })
 
         const { _id: id, ...insertedInfo } = result.ops[0]
-        return { id, ...insertedInfo}
+        return { id, ...insertedInfo }
+    }
+
+    async function createEmail({ id: _id = Id.makeId(), ...email_details }) {
+        //email_details = data specified in entity, groupid, merchantid ... initiatedon
+        const db = await makeDb()
+        const result = await db
+            .collection(process.env.emailCollection)
+            .insertOne({ _id, ...email_details })
+
+        const { _id: id, ...insertedInfo } = result.ops[0]
+        return { id, ...insertedInfo }
     }
 
     // find everyone in db
@@ -87,7 +99,7 @@ export default function makeCommunicationDb ({ makeDb }){
     }
 
     // finding merchant id ( might have to open up a little more to get access to merchant id)
-    async function findByMerchantId ({ merchant_id }){
+    async function findByMerchantId({ merchant_id }) {
         const db = await makeDb()
         const result = await db.collection(process.env.CONTACTS_COLLECTION).find({ merchant_id: merchant_id })
         const found = await result.toArray()
@@ -97,17 +109,17 @@ export default function makeCommunicationDb ({ makeDb }){
         const { ...info } = found[0]
         return { ...info }
     }
-    
+
     // find contacts using group id.
-    async function findByGroupId({ group_id }){
+    async function findByGroupId({ group_id }) {
         const db = await makeDb()
-        const result = await db.collection(process.env.CONTACTS_COLLECTION).find({ "merchants.group_id" : group_id})
+        const result = await db.collection(process.env.CONTACTS_COLLECTION).find({ "merchants.group_id": group_id })
         const found = await result.toArray()
         // console.log("kklklkl", found)
-        if(found.length === 0){
+        if (found.length === 0) {
             return null
         }
         return found
     }
-    
+
 }

@@ -3,16 +3,19 @@ import communicationDb from '../data-access'
 import responses from '../responses'
 import smsSend from '../notification-actions'
 import createAddUpload from './add-upload'
+import { emailSend } from '../notification-actions'
+import makeSendEmail from './email-case'
 
-
+const sendEmail = makeSendEmail({ communicationDb, responses, emailSend})
 const sendSMS = makeSendSMS({ communicationDb, responses, smsSend })
 const addUpload = createAddUpload({ communicationDb })
 
 
 const notificationUseCase = Object.freeze({
-    sendSMS, //add for email here and don't forget to export individually
+    sendSMS,
+    sendEmail,
     addUpload,
 })
 
 export default notificationUseCase
-export { sendSMS, addUpload }
+export { sendSMS, sendEmail, addUpload }
