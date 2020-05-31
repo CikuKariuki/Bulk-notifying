@@ -2,8 +2,7 @@ import { makeEmail } from '../notifications'
 
 export default function makeSendEmail({ communicationDb, responses, emailSend }){
     return async function startSendEmail({ ...data }){
-        console.log(data)
-        
+    
         let email_notification
 
         try {
@@ -23,7 +22,7 @@ export default function makeSendEmail({ communicationDb, responses, emailSend })
 
             })
             // start sending email, call emailSend frm email-action and send email in payload
-            await emailSend.startSendEmail({ message: email_notification.getMessage() })
+            await emailSend.startSendEmail({ message: email_notification.getMessage(), merchant_email: email_notification.getMerchantEmail(), subject: email_notification.getSubject(), group_id: email_notification.getGroupId(), merchant_id: email_notification.getMerchantId()})
             return responses.successResponse(emailCreate)
         }
         catch(e){

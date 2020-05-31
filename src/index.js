@@ -26,7 +26,7 @@ app.post(`${apiVersion}/upload/:merchant_id`, upload.single('csvFile'), csvCallb
 //endpoint that is calling controllers that call a function called sendSMS
 app.post(`${apiVersion}/notification/sms/:group_id`, expressCallback(controllers.notifications.sendSMS))
 // email sending
-app.post(`${apiVersion}/notification/email/:group_id`, expressCallback(controllers.emails.sendEmail))
+app.post(`${apiVersion}/notification/email/:group_id`, expressCallback(controllers.notifications.sendEmail))
 
 app.use(expressCallback(controllers.notFound))
 

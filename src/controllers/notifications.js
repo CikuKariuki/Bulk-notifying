@@ -22,8 +22,28 @@ export default function makeNotifications({ notificationUseCases }){
             return response.httpResponse(errorBody)
         }
     }
+    async function sendEmail(httpRequest){
+        try{
+            const group_id = httpRequest.params.group_id
+            const body = httpRequest.body
+            const data = {...body, group_id}
+
+            const email = await notificationUseCases.sendEmail(data)
+            return response.httpResponse(email)
+        }
+        catch(e){
+            const errorBody = {
+                status: 400,
+                message: {
+                    error: e.message
+                }
+            }
+            return response.httpResponse(errorBody)
+        }
+    }
     return Object.freeze({
-        sendSMS
+        sendSMS,
+        sendEmail
     })
 }
 // responses are got from the imported http-response file.
