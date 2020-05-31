@@ -29,12 +29,13 @@ export default function makeSmsSender({ makeAxios, communicationDb }) {
         //    loop through the found phone numbers and send the text
         phoneArray.forEach(function(phone, index, array) {
             phone = array[index]
+            // console.log(phone)
             const data = {
                 "api_key": process.env.smsApiKey,
                 "service_id": 0,
                 "mobile": phone, //input array of numbers from contactsdb look how notifications looped through, but first how csvitems was ooped through.
                 "response_type": "json",
-                "shortcode": "Ciku",
+                "shortcode": "Tilil",
                 "message": messageInfo.message
             }
             axios.post('https://api.tililsms.com/sms/v3/sendsms', data)
